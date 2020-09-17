@@ -11,7 +11,7 @@ import main.entity.Funcionario;
 import main.repository.CNXJDBC;
 import main.util.ShowAlert;
 
-public class DaoFuncionario {
+public class DaoFuncionario extends CNXJDBC {
 
 	private final String SQL_INSERE_FUNCIONARIO = "INSERT INTO Funcionario (Cpf,Nome,Email, Cargo, Data_nascimento, Salario) VALUES (?,?,?,?,?,?);";
 
@@ -26,7 +26,7 @@ public class DaoFuncionario {
 
 	public boolean inserirFuncionario(Funcionario funcionario) {
 	
-		try (Connection conn = new CNXJDBC().conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_INSERE_FUNCIONARIO);) {
+		try (Connection conn = this.conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_INSERE_FUNCIONARIO);) {
 			pst.setString(1, funcionario.getCpf());
 			pst.setString(2, funcionario.getNome());
 			pst.setString(3, funcionario.getEmail());
@@ -49,7 +49,7 @@ public class DaoFuncionario {
 		ArrayList<Funcionario> listaFuncionario = new ArrayList<Funcionario>();
 
 		Funcionario funcionario;
-		try (Connection conn = new CNXJDBC().conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_SELECIONA_FUNCIONARIO); ResultSet rs = pst.executeQuery();) {
+		try (Connection conn = this.conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_SELECIONA_FUNCIONARIO); ResultSet rs = pst.executeQuery();) {
 			while (rs.next()) {
 				funcionario = new Funcionario();
 				funcionario.setCpf(rs.getString("CPF"));
@@ -73,7 +73,7 @@ public class DaoFuncionario {
 	
 	public boolean alterarFuncionario(Funcionario funcionario) {
 		
-		try (Connection conn = new CNXJDBC().conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_ALTERA_FUNCIONARIO);) {
+		try (Connection conn = this.conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_ALTERA_FUNCIONARIO);) {
 			pst.setString(1, funcionario.getCpf());
 			pst.setString(2, funcionario.getNome());
 			pst.setString(3, funcionario.getEmail());
@@ -94,7 +94,7 @@ public class DaoFuncionario {
 	}
 	
 	 public void excluirFuncionario(Integer Id_funcionario) {
-			try (Connection conn = new CNXJDBC().conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_EXCLUI_FUNCIONARIO);) {
+			try (Connection conn = this.conexaoBanco(); PreparedStatement pst = conn.prepareStatement(SQL_EXCLUI_FUNCIONARIO);) {
 				pst.setInt(1, Id_funcionario);
 				pst.execute();
 			} catch (SQLException e) {
